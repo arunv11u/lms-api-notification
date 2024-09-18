@@ -82,13 +82,19 @@ describe("Mail Client Module", () => {
 				mailClient.init();
 
 				const mailMessage = new MailMessage(
-					"org@imsafe.app",
-					"prabin@imsafe.app"
+					{
+						name: "Learning Management System",
+						address: "noreply@lms-staging.com"
+					},
+					"receiver-email@gmail.com"
 				);
 
 				const spySendMail = jest.spyOn(mailClient, "sendMail");
 
-				await mailClient.sendMail(mailMessage, "", "", "");
+				const html = "<h1>Hello There!</h1>";
+				const subject = "Test Email";
+				const text = "Hello There!";
+				await mailClient.sendMail(mailMessage, html, subject, text);
 
 				expect(spySendMail).toHaveBeenCalled();
 			});

@@ -59,7 +59,8 @@ export class MailClientImpl implements MailClient {
 			auth: {
 				user: this._user,
 				pass: this._password
-			}
+			},
+			secure: this._port === 465
 		});
 	}
 

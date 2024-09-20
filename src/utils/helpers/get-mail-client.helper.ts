@@ -10,10 +10,10 @@ function getMailClient(): MailClient {
 
 	const mailClient = new MailClientImpl();
 
-	const host = nconf.get("mailClientHost");
-	const port = nconf.get("mailClientPort");
-	const user = nconf.get("mailClientUser");
-	const password = nconf.get("mailClientPassword");
+	const host = nconf.get("mailHost");
+	const port = nconf.get("mailPort");
+	const user = nconf.get("MAIL_USER");
+	const password = nconf.get("MAIL_PASSWORD");
 
 	if (!host) throw new GenericError({
 		code: ErrorCodes.internalError,

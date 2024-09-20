@@ -1,15 +1,16 @@
 /* eslint-disable indent */
 /* eslint-disable max-classes-per-file */
 import nconf from "nconf";
-import { 
-	CompressionCodecs, 
-	CompressionTypes, 
-	ConsumerConfig, 
-	ConsumerRunConfig, 
-	Partitioners, 
-	ProducerConfig 
+import {
+	CompressionCodecs,
+	CompressionTypes,
+	ConsumerConfig,
+	ConsumerRunConfig,
+	Partitioners,
+	ProducerConfig
 } from "kafkajs";
-import { MessagingListener, Winston, winstonLogger } from "./utils";
+import { MessagingListener, MessagingTopics, Winston, winstonLogger } from "./utils";
+import { SendForgotPasswordEmailForStudentListener } from "./student";
 
 
 
@@ -21,6 +22,8 @@ class MessagingLoaderImpl {
 	private _consumerRunConfig: ConsumerRunConfig;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	private _listeners: MessagingListener<{ topic: string, data: any }>[];
+	private _sendForgotPasswordEmailForStudentListener =
+		new SendForgotPasswordEmailForStudentListener();
 	private _winston: Winston;
 
 	constructor() {
@@ -32,7 +35,9 @@ class MessagingLoaderImpl {
 
 		this._clientId = "notification-service";
 
-		this._listeners = [];
+		this._listeners = [
+			this._sendForgotPasswordEmailForStudentListener
+		];
 
 		this._producerConfig = {
 			createPartitioner: Partitioners.LegacyPartitioner,
@@ -57,10 +62,15 @@ class MessagingLoaderImpl {
 					}}`);
 
 					switch (topic) {
-						// case MessagingTopics.x: {
-						// 	this._winston.info("X create listener called :");
-						// 	break;
-						// }
+						case MessagingTopics.studentForgotPasswordEvent: {
+							this._winston.info("Student forgot password event listener called :");
+
+							await this
+								._sendForgotPasswordEmailForStudentListener
+								.listen(message);
+
+							break;
+						}
 
 						default: {
 							this._winston.error("Topic is not listed in consumer run config");

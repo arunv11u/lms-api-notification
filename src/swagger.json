@@ -11,7 +11,7 @@
 			"description": "Local host server, exclusively for back-end developers."
 		},
 		{
-			"url": "https://smooth-raptor-explicitly.ngrok-free.app/api/auth",
+			"url": "https://smooth-raptor-explicitly.ngrok-free.app/api/notification",
 			"description": "LMS API's related to notifications"
 		}
 	],

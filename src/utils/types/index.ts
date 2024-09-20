@@ -26,6 +26,12 @@ export * from "./interactor.type";
 
 export * from "./loader.type";
 
+export * from "./repository.type";
+
 export * from "./routes.type";
 
+export * from "./unit-of-work.type";
+
 export * from "./use-case.type";
+
+export * from "./user.type";

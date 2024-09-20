@@ -1,5 +1,6 @@
 import { Express } from "express";
 import nconf from "nconf";
+import { mongoDBConnect } from "@arunvaradharajalu/common.mongodb-api";
 import {
 	DefaultConfig,
 	Environment,
@@ -49,9 +50,18 @@ export class LoaderImpl implements Loader {
 				logPath
 			);
 
+
+			mongoDBConnect.url = nconf.get("mongodbURL");
+			mongoDBConnect.username = nconf.get("MONGODB_USERNAME");
+			mongoDBConnect.password = nconf.get("MONGODB_PASSWORD");
+			mongoDBConnect.dbName = nconf.get("mongodbDatabaseName");
+
+			mongoDBConnect.init();
+			await mongoDBConnect.connect();
+
 			const messagingLoader = new MessagingLoaderImpl();
 
-			messagingClient.setup(true, false);
+			messagingClient.setup(true, true);
 			messagingClient.brokers = [nconf.get("bootstrapKafkaBroker")];
 			messagingClient.clientId = messagingLoader.clientId;
 			messagingClient.producerConfig = messagingLoader.producerConfig;

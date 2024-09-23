@@ -5,7 +5,13 @@ import { Readable } from "nodemailer/lib/xoauth2";
 
 enum TemplateFolderNames {
 	test = "test",
-	sendForgotPasswordEmailForStudent = "send-forgot-password-email-for-student"
+	sendForgotPasswordEmailForStudent = "send-forgot-password-email-for-student",
+	welcomEmailForStudent = "welcome-email-for-student"
+}
+
+enum EmailTypes {
+	forgotPassword = "FORGOT_PASSWORD",
+	welcomEmail = "WELCOME_EMAIL"
 }
 
 enum TemplateTypes {
@@ -44,6 +50,7 @@ class MailMessage {
 
 export {
 	TemplateFolderNames,
+	EmailTypes,
 	TemplateTypes,
 	MailMessageFrom,
 	MailMessageTo,

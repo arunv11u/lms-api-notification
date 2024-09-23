@@ -1,8 +1,7 @@
 import { MongoDBRepository } from "@arunvaradharajalu/common.mongodb-api";
-import { ForgotPasswordRegistryRepositoryImpl } from "../../../forgot-password-registry";
 import { ErrorCodes, GenericError } from "../../../utils";
-import { StudentForgotPasswordValueObject, StudentRepository } from "../../domain";
-import { EmailRepositoryImpl } from "../../../email";
+import { StudentForgotPasswordEventValueObject, StudentRepository, StudentWelcomeEventValueObject } from "../../domain";
+import { EmailRegistryRepositoryImpl, EmailRepositoryImpl } from "../../../email";
 
 
 
@@ -15,7 +14,8 @@ export class StudentRepositoryImpl implements StudentRepository {
 	}
 
 	async sendForgotPasswordEmail(
-		studentForgotPasswordValueObject: StudentForgotPasswordValueObject
+		studentForgotPasswordEventValueObject:
+			StudentForgotPasswordEventValueObject
 	): Promise<void> {
 		if (!this._mongoDBRepository)
 			throw new GenericError({
@@ -25,23 +25,53 @@ export class StudentRepositoryImpl implements StudentRepository {
 			});
 
 		const emailRepository = new EmailRepositoryImpl();
-		const forgotPasswordRegistryRepository =
-			new ForgotPasswordRegistryRepositoryImpl(
+		const emailRegistryRepository =
+			new EmailRegistryRepositoryImpl(
 				this._mongoDBRepository
 			);
 
-		await forgotPasswordRegistryRepository
+		await emailRegistryRepository
 			.saveForgotPasswordEmailForStudentEvent(
-				studentForgotPasswordValueObject.id,
-				studentForgotPasswordValueObject.userId,
-				studentForgotPasswordValueObject.email,
-				studentForgotPasswordValueObject.version
+				studentForgotPasswordEventValueObject.id,
+				studentForgotPasswordEventValueObject.userId,
+				studentForgotPasswordEventValueObject.email,
+				studentForgotPasswordEventValueObject.version
 			);
 
 		await emailRepository.sendForgotPasswordEmailForStudent(
-			studentForgotPasswordValueObject.firstName,
-			studentForgotPasswordValueObject.email,
-			studentForgotPasswordValueObject.verificationCode
+			studentForgotPasswordEventValueObject.firstName,
+			studentForgotPasswordEventValueObject.email,
+			studentForgotPasswordEventValueObject.verificationCode
+		);
+	}
+
+	async sendWelcomeEmail(
+		studentWelcomeEventValueObject: StudentWelcomeEventValueObject
+	): Promise<void> {
+		if (!this._mongoDBRepository)
+			throw new GenericError({
+				code: ErrorCodes.mongoDBRepositoryDoesNotExist,
+				error: new Error("MongoDB repository does not exist"),
+				errorCode: 500
+			});
+
+		const emailRepository = new EmailRepositoryImpl();
+		const emailRegistryRepository =
+			new EmailRegistryRepositoryImpl(
+				this._mongoDBRepository
+			);
+
+		await emailRegistryRepository
+			.saveWelcomeEmailForStudentEvent(
+				studentWelcomeEventValueObject.id,
+				studentWelcomeEventValueObject.userId,
+				studentWelcomeEventValueObject.email,
+				studentWelcomeEventValueObject.version
+			);
+
+		await emailRepository.sendWelcomeEmailForStudent(
+			studentWelcomeEventValueObject.firstName,
+			studentWelcomeEventValueObject.email
 		);
 	}
 }

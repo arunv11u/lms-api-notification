@@ -1,6 +1,6 @@
 
 
-interface SendForgotPasswordEmailForStudentEventRequestDTO {
+interface ProcessStudentForgotPasswordEventRequestDTO {
 	id: string;
 	userId: string;
 	firstName: string;
@@ -11,5 +11,5 @@ interface SendForgotPasswordEmailForStudentEventRequestDTO {
 }
 
 export {
-	SendForgotPasswordEmailForStudentEventRequestDTO
+	ProcessStudentForgotPasswordEventRequestDTO
 };

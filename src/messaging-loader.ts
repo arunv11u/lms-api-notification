@@ -10,7 +10,7 @@ import {
 	ProducerConfig
 } from "kafkajs";
 import { MessagingListener, MessagingTopics, Winston, winstonLogger } from "./utils";
-import { SendForgotPasswordEmailForStudentListener } from "./student";
+import { StudentForgotPasswordEventListener, StudentWelcomeEventListener } from "./student";
 
 
 
@@ -22,8 +22,10 @@ class MessagingLoaderImpl {
 	private _consumerRunConfig: ConsumerRunConfig;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	private _listeners: MessagingListener<{ topic: string, data: any }>[];
-	private _sendForgotPasswordEmailForStudentListener =
-		new SendForgotPasswordEmailForStudentListener();
+	private _studentForgotPasswordEventListener =
+		new StudentForgotPasswordEventListener();
+	private _studentWelcomeEventListener =
+		new StudentWelcomeEventListener();
 	private _winston: Winston;
 
 	constructor() {
@@ -36,7 +38,8 @@ class MessagingLoaderImpl {
 		this._clientId = "notification-service";
 
 		this._listeners = [
-			this._sendForgotPasswordEmailForStudentListener
+			this._studentForgotPasswordEventListener,
+			this._studentWelcomeEventListener
 		];
 
 		this._producerConfig = {
@@ -66,7 +69,17 @@ class MessagingLoaderImpl {
 							this._winston.info("Student forgot password event listener called :");
 
 							await this
-								._sendForgotPasswordEmailForStudentListener
+								._studentForgotPasswordEventListener
+								.listen(message);
+
+							break;
+						}
+
+						case MessagingTopics.studentWelcomeEvent: {
+							this._winston.info("Student welcome email event listener called :");
+
+							await this
+								._studentWelcomeEventListener
 								.listen(message);
 
 							break;

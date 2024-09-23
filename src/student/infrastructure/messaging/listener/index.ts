@@ -1,1 +1,3 @@
-export * from "./send-forgot-password-email-for-student.listener";
+export * from "./student-welcome-event.listener";
+
+export * from "./student-forgot-password-event.listener";

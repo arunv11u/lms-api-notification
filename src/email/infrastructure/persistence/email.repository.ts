@@ -29,6 +29,53 @@ class EmailRepositoryImpl {
 		};
 
 		const recipient = email;
+		// eslint-disable-next-line no-console
+		console.log("nconf.get('MAIL_USER') :: ", nconf.get("MAIL_USER"));
+		const mailMessage = new MailMessage(
+			nconf.get("MAIL_USER"),
+			recipient
+		);
+
+		const html = await this._getCompiledTemplate(
+			templateFolderName,
+			TemplateTypes.html,
+			data
+		);
+
+		const subject = await this._getCompiledTemplate(
+			templateFolderName,
+			TemplateTypes.subject
+		);
+
+		const text = await this._getCompiledTemplate(
+			templateFolderName,
+			TemplateTypes.text,
+			data
+		);
+
+		// eslint-disable-next-line no-console
+		console.log("sendForgotPasswordEmailForStudent :: data ::", data);
+
+		await this._mailClient
+			.sendMail(
+				mailMessage,
+				html,
+				subject,
+				text
+			);
+	}
+
+	async sendWelcomeEmailForStudent(
+		firstName: string,
+		email: string
+	) {
+		const templateFolderName =
+			TemplateFolderNames.welcomEmailForStudent;
+		const data = {
+			firstName
+		};
+
+		const recipient = email;
 		const mailMessage = new MailMessage(
 			{ address: nconf.get("MAIL_USER"), name: nconf.get("mailUserAlias") },
 			recipient
@@ -52,7 +99,7 @@ class EmailRepositoryImpl {
 		);
 
 		// eslint-disable-next-line no-console
-		console.log("sendForgotPasswordEmailForStudent :: data ::", data);
+		console.log("sendWelcomeEmailForStudent :: data ::", data);
 
 		await this._mailClient
 			.sendMail(

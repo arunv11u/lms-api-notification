@@ -1,5 +1,5 @@
 import { ErrorCodes, Factory, GenericError } from "../../utils";
-import { SendForgotPasswordEmailForStudentEventUseCaseImpl } from "../application";
+import { ProcessStudentForgotPasswordEventUseCaseImpl, ProcessStudentWelcomeEmailEventUsecaseImpl } from "../application";
 import { StudentObject } from "../domain";
 import { StudentRepositoryImpl } from "../infrastructure";
 
@@ -8,7 +8,8 @@ class StudentFactory implements Factory {
 
 	private _objects: string[] = [
 		"StudentRepository",
-		"SendForgotPasswordEmailForStudentEventUseCase"
+		"ProcessStudentForgotPasswordEventUseCase",
+		"ProcessStudentWelcomeEmailEventUsecase"
 	];
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -17,8 +18,11 @@ class StudentFactory implements Factory {
 		if (objectName === "StudentRepository")
 			return new StudentRepositoryImpl();
 
-		if (objectName === "SendForgotPasswordEmailForStudentEventUseCase")
-			return new SendForgotPasswordEmailForStudentEventUseCaseImpl();
+		if (objectName === "ProcessStudentForgotPasswordEventUseCase")
+			return new ProcessStudentForgotPasswordEventUseCaseImpl();
+
+		if (objectName === "ProcessStudentWelcomeEmailEventUsecase")
+			return new ProcessStudentWelcomeEmailEventUsecaseImpl();
 
 		throw new GenericError({
 			code: ErrorCodes.invalidFactoryObject,

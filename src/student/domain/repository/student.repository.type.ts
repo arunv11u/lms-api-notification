@@ -1,10 +1,15 @@
 import { Repository } from "../../../utils";
-import { StudentForgotPasswordValueObject } from "../value-object";
+import { StudentForgotPasswordEventValueObject, StudentWelcomeEventValueObject } from "../value-object";
 
 
 export abstract class StudentRepository extends Repository {
-	
+
 	abstract sendForgotPasswordEmail(
-		studentForgotPasswordValueObject: StudentForgotPasswordValueObject
+		studentForgotPasswordEventValueObject:
+			StudentForgotPasswordEventValueObject
+	): Promise<void>;
+
+	abstract sendWelcomeEmail(
+		studentWelcomeEventValueObject: StudentWelcomeEventValueObject
 	): Promise<void>;
 }

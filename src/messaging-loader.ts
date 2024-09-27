@@ -15,6 +15,7 @@ import {
 	StudentWelcomeEventListener
 } from "./student";
 import {
+	InstructorForgotPasswordEventListener,
 	InstructorWelcomeEventListener
 } from "./instructor";
 
@@ -34,6 +35,8 @@ class MessagingLoaderImpl {
 		new StudentWelcomeEventListener();
 	private _instructorWelcomeEventListener =
 		new InstructorWelcomeEventListener();
+	private _instructorForgotPasswordEventListener = 
+		new InstructorForgotPasswordEventListener();
 	private _winston: Winston;
 
 	constructor() {
@@ -48,7 +51,8 @@ class MessagingLoaderImpl {
 		this._listeners = [
 			this._studentForgotPasswordEventListener,
 			this._studentWelcomeEventListener,
-			this._instructorWelcomeEventListener
+			this._instructorWelcomeEventListener,
+			this._instructorForgotPasswordEventListener
 		];
 
 		this._producerConfig = {
@@ -106,6 +110,16 @@ class MessagingLoaderImpl {
 
 							await this
 								._instructorWelcomeEventListener
+								.listen(message);
+
+							break;
+						}
+
+						case MessagingTopics.instructorForgotPasswordEvent: {
+							this._winston.info("Instructor forgot password event listener called :");
+
+							await this
+								._instructorForgotPasswordEventListener
 								.listen(message);
 
 							break;

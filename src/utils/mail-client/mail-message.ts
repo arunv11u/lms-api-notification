@@ -7,7 +7,8 @@ enum TemplateFolderNames {
 	test = "test",
 	sendForgotPasswordEmailForStudent = "send-forgot-password-email-for-student",
 	welcomEmailForStudent = "welcome-email-for-student",
-	welcomeEmailForInstructor = "welcome-email-for-instructor"
+	welcomeEmailForInstructor = "welcome-email-for-instructor",
+	sendForgotPasswordEmailForInstructor = "send-forgot-password-email-for-instructor"
 }
 
 enum EmailTypes {

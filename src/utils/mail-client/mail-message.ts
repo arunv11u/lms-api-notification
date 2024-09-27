@@ -6,7 +6,8 @@ import { Readable } from "nodemailer/lib/xoauth2";
 enum TemplateFolderNames {
 	test = "test",
 	sendForgotPasswordEmailForStudent = "send-forgot-password-email-for-student",
-	welcomEmailForStudent = "welcome-email-for-student"
+	welcomEmailForStudent = "welcome-email-for-student",
+	welcomeEmailForInstructor = "welcome-email-for-instructor"
 }
 
 enum EmailTypes {

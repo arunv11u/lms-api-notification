@@ -9,28 +9,35 @@ import {
 } from "../types";
 import { getMongoDBRepository } from "../helpers";
 import { StudentRepository } from "../../student";
-import { getStudentFactory } from "../../global-config";
+import { getInstructorFactory, getStudentFactory } from "../../global-config";
+import { InstructorRepository } from "../../instructor";
 
 
 //! Do not export this Repositories enum at any cost.
 enum Repositories {
-	studentRepository = "StudentRepository"
+	studentRepository = "StudentRepository",
+	instructorRepository = "InstructorRepository"
 }
 
 class UnitOfWorkImpl implements UnitOfWork {
 
 	private _repositories = [
-		Repositories.studentRepository
+		Repositories.studentRepository,
+		Repositories.instructorRepository
 	];
 
 	private _mongoDBRepository: MongoDBRepository;
 	private _studentRepository: StudentRepository;
+	private _instructorRepository: InstructorRepository;
 
 	constructor() {
 		this._mongoDBRepository = getMongoDBRepository();
 
 		this._studentRepository = getStudentFactory().make("StudentRepository") as StudentRepository;
 		this._studentRepository.mongoDBRepository = this._mongoDBRepository;
+
+		this._instructorRepository = getInstructorFactory().make("InstructorRepository") as InstructorRepository;
+		this._instructorRepository.mongoDBRepository = this._mongoDBRepository;
 	}
 
 	async start() {
@@ -45,7 +52,10 @@ class UnitOfWorkImpl implements UnitOfWork {
 
 		if (repositoryName === Repositories.studentRepository)
 			return this._studentRepository;
-		
+
+		if (repositoryName === Repositories.instructorRepository)
+			return this._instructorRepository;
+
 		throw new GenericError({
 			code: ErrorCodes.internalError,
 			error: new Error("Given repository not found"),

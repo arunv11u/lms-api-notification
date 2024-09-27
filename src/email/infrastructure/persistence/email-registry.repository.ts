@@ -117,6 +117,37 @@ class EmailRegistryRepositoryImpl {
 				emailRegistryORMEntity
 			);
 	}
+
+	// eslint-disable-next-line max-params
+	async saveWelcomeEmailForInstructorEvent(
+		id: string,
+		userId: string,
+		email: string,
+		version: number
+	): Promise<void> {
+		if (!this._mongodbRepository)
+			throw new GenericError({
+				code: ErrorCodes.mongoDBRepositoryDoesNotExist,
+				error: new Error("MongoDB repository does not exist"),
+				errorCode: 500
+			});
+
+		const emailRegistryORMEntity =
+			new EmailRegistryORMEntity();
+
+		emailRegistryORMEntity._id = id;
+		emailRegistryORMEntity.email = email;
+		emailRegistryORMEntity.emailType = EmailTypes.welcomEmail;
+		emailRegistryORMEntity.userId = userId;
+		emailRegistryORMEntity.userType = UserTypes.instructor;
+		emailRegistryORMEntity.version = version;
+
+		await this._mongodbRepository
+			.add<EmailRegistryORMEntity>(
+				this._collectionName,
+				emailRegistryORMEntity
+			);
+	}
 }
 
 export {

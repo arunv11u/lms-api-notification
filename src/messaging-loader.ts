@@ -10,7 +10,13 @@ import {
 	ProducerConfig
 } from "kafkajs";
 import { MessagingListener, MessagingTopics, Winston, winstonLogger } from "./utils";
-import { StudentForgotPasswordEventListener, StudentWelcomeEventListener } from "./student";
+import {
+	StudentForgotPasswordEventListener,
+	StudentWelcomeEventListener
+} from "./student";
+import {
+	InstructorWelcomeEventListener
+} from "./instructor";
 
 
 
@@ -26,6 +32,8 @@ class MessagingLoaderImpl {
 		new StudentForgotPasswordEventListener();
 	private _studentWelcomeEventListener =
 		new StudentWelcomeEventListener();
+	private _instructorWelcomeEventListener =
+		new InstructorWelcomeEventListener();
 	private _winston: Winston;
 
 	constructor() {
@@ -39,7 +47,8 @@ class MessagingLoaderImpl {
 
 		this._listeners = [
 			this._studentForgotPasswordEventListener,
-			this._studentWelcomeEventListener
+			this._studentWelcomeEventListener,
+			this._instructorWelcomeEventListener
 		];
 
 		this._producerConfig = {
@@ -80,6 +89,16 @@ class MessagingLoaderImpl {
 
 							await this
 								._studentWelcomeEventListener
+								.listen(message);
+
+							break;
+						}
+
+						case MessagingTopics.instructorWelcomeEvent: {
+							this._winston.info("Instructor welcome email event listener called :");
+
+							await this
+								._instructorWelcomeEventListener
 								.listen(message);
 
 							break;

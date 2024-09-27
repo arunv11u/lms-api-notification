@@ -77,7 +77,7 @@ class EmailRepositoryImpl {
 
 		const recipient = email;
 		const mailMessage = new MailMessage(
-			{ address: nconf.get("MAIL_USER"), name: nconf.get("mailUserAlias") },
+			nconf.get("MAIL_USER"),
 			recipient
 		);
 
@@ -100,6 +100,51 @@ class EmailRepositoryImpl {
 
 		// eslint-disable-next-line no-console
 		console.log("sendWelcomeEmailForStudent :: data ::", data);
+
+		await this._mailClient
+			.sendMail(
+				mailMessage,
+				html,
+				subject,
+				text
+			);
+	}
+
+	async sendWelcomeEmailForInstructor(
+		firstName: string,
+		email: string
+	) {
+		const templateFolderName =
+			TemplateFolderNames.welcomeEmailForInstructor;
+		const data = {
+			firstName
+		};
+
+		const recipient = email;
+		const mailMessage = new MailMessage(
+			nconf.get("MAIL_USER"),
+			recipient
+		);
+
+		const html = await this._getCompiledTemplate(
+			templateFolderName,
+			TemplateTypes.html,
+			data
+		);
+
+		const subject = await this._getCompiledTemplate(
+			templateFolderName,
+			TemplateTypes.subject
+		);
+
+		const text = await this._getCompiledTemplate(
+			templateFolderName,
+			TemplateTypes.text,
+			data
+		);
+
+		// eslint-disable-next-line no-console
+		console.log("sendWelcomeEmailForInstructor :: data ::", data);
 
 		await this._mailClient
 			.sendMail(

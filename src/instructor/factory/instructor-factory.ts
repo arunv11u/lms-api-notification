@@ -1,5 +1,8 @@
 import { ErrorCodes, Factory, GenericError } from "../../utils";
-import { ProcessInstructorWelcomeEmailEventUsecaseImpl } from "../application";
+import {
+	ProcessInstructorForgotPasswordEventUseCaseImpl,
+	ProcessInstructorWelcomeEmailEventUsecaseImpl
+} from "../application";
 import { InstructorObject } from "../domain";
 import { InstructorRepositoryImpl } from "../infrastructure";
 
@@ -8,7 +11,8 @@ class InstructorFactory implements Factory {
 
 	private _objects: string[] = [
 		"InstructorRepository",
-		"ProcessInstructorWelcomeEmailEventUsecase"
+		"ProcessInstructorWelcomeEmailEventUsecase",
+		"ProcessInstructorForgotPasswordEventUseCase"
 	];
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -19,6 +23,9 @@ class InstructorFactory implements Factory {
 
 		if (objectName === "ProcessInstructorWelcomeEmailEventUsecase")
 			return new ProcessInstructorWelcomeEmailEventUsecaseImpl();
+
+		if (objectName === "ProcessInstructorForgotPasswordEventUseCase")
+			return new ProcessInstructorForgotPasswordEventUseCaseImpl();
 
 		throw new GenericError({
 			code: ErrorCodes.invalidFactoryObject,

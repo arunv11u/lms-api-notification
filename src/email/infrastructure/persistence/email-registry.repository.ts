@@ -148,6 +148,59 @@ class EmailRegistryRepositoryImpl {
 				emailRegistryORMEntity
 			);
 	}
+
+	async isForgotPasswordEmailForInstructorExists(
+		id: string
+	): Promise<boolean> {
+		if (!this._mongodbRepository)
+			throw new GenericError({
+				code: ErrorCodes.mongoDBRepositoryDoesNotExist,
+				error: new Error("MongoDB repository does not exist"),
+				errorCode: 500
+			});
+
+		const emailRegistryORMEntity = await this._mongodbRepository
+			.get<EmailRegistryORMEntity>(
+				this._collectionName,
+				id
+			);
+
+		if (emailRegistryORMEntity)
+			return true;
+
+		return false;
+	}
+
+	// eslint-disable-next-line max-params
+	async saveForgotPasswordEmailForInstructorEvent(
+		id: string,
+		userId: string,
+		email: string,
+		version: number
+	): Promise<void> {
+		if (!this._mongodbRepository)
+			throw new GenericError({
+				code: ErrorCodes.mongoDBRepositoryDoesNotExist,
+				error: new Error("MongoDB repository does not exist"),
+				errorCode: 500
+			});
+
+		const emailRegistryORMEntity =
+			new EmailRegistryORMEntity();
+
+		emailRegistryORMEntity._id = id;
+		emailRegistryORMEntity.email = email;
+		emailRegistryORMEntity.emailType = EmailTypes.forgotPassword;
+		emailRegistryORMEntity.userId = userId;
+		emailRegistryORMEntity.userType = UserTypes.instructor;
+		emailRegistryORMEntity.version = version;
+
+		await this._mongodbRepository
+			.add<EmailRegistryORMEntity>(
+				this._collectionName,
+				emailRegistryORMEntity
+			);
+	}
 }
 
 export {

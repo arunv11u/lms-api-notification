@@ -155,6 +155,55 @@ class EmailRepositoryImpl {
 			);
 	}
 
+	async sendForgotPasswordEmailForInstructor(
+		firstName: string,
+		email: string,
+		verificationCode: string
+	) {
+		const templateFolderName =
+			TemplateFolderNames.sendForgotPasswordEmailForInstructor;
+		const data = {
+			firstName,
+			verificationCode
+		};
+
+		const recipient = email;
+		// eslint-disable-next-line no-console
+		console.log("nconf.get('MAIL_USER') :: ", nconf.get("MAIL_USER"));
+		const mailMessage = new MailMessage(
+			nconf.get("MAIL_USER"),
+			recipient
+		);
+
+		const html = await this._getCompiledTemplate(
+			templateFolderName,
+			TemplateTypes.html,
+			data
+		);
+
+		const subject = await this._getCompiledTemplate(
+			templateFolderName,
+			TemplateTypes.subject
+		);
+
+		const text = await this._getCompiledTemplate(
+			templateFolderName,
+			TemplateTypes.text,
+			data
+		);
+
+		// eslint-disable-next-line no-console
+		console.log("sendForgotPasswordEmailForInstructor :: data ::", data);
+
+		await this._mailClient
+			.sendMail(
+				mailMessage,
+				html,
+				subject,
+				text
+			);
+	}
+
 	private async _getCompiledTemplate(
 		folderName: TemplateFolderNames,
 		type: TemplateTypes,

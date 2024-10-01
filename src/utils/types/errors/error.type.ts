@@ -1,7 +1,7 @@
 
 export enum ErrorCodes {
 	clientError = "CLIENT_ERROR",
-	unauthorized = "UNAUTHRORIZED",
+	unauthorized = "UNAUTHORIZED",
 	paymentRequired = "PAYMENT_REQUIRED",
 	forbidden = "FORBIDDEN",
 	notFound = "NOT_FOUND",

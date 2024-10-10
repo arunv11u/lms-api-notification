@@ -31,7 +31,8 @@ export enum ErrorCodes {
 	googleAuthCodeRequired = "GOOGLE_AUTH_CODE_REQUIRED",
 	googleRedirectUriRequired = "GOOGLE_REDIRECT_URI_REQUIRED",
 	mongoDBRepositoryDoesNotExist = "MONGODB_REPOSITORY_DOES_NOT_EXIST",
-	messageEmptyInMessagingListener = "MESSAGE_EMPTY_IN_MESSAGING_LISTENER"
+	messageEmptyInMessagingListener = "MESSAGE_EMPTY_IN_MESSAGING_LISTENER",
+	unverifiedSNSMessage = "UNVERIFIED_SNS_MESSAGE"
 }
 
 export interface FormattedError {

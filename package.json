@@ -58,6 +58,7 @@
 		"@types/nodemailer": "^6.4.15",
 		"@types/supertest": "^6.0.2",
 		"@types/swagger-ui-express": "^4.1.6",
+		"@types/uuid": "^10.0.0",
 		"@typescript-eslint/eslint-plugin": "^7.11.0",
 		"@typescript-eslint/parser": "^7.11.0",
 		"copyfiles": "^2.4.1",
@@ -74,6 +75,7 @@
 	},
 	"dependencies": {
 		"@arunvaradharajalu/common.app-router": "^1.1.8",
+		"@arunvaradharajalu/common.axios": "^1.2.0",
 		"@arunvaradharajalu/common.decorators": "^1.0.2",
 		"@arunvaradharajalu/common.errors": "^1.0.0",
 		"@arunvaradharajalu/common.mongodb-api": "^1.1.1",

@@ -2,7 +2,7 @@ import {
 	CourseObject,
 	CourseRepository,
 	PublishCourseTranscodingCompletedEventValueObject,
-	StripeCheckoutCompletedEventValueObject
+	PublishStripeCheckoutCompletedEventValueObject
 } from "../../domain";
 import {
 	CourseTranscodingCompletedEvent,
@@ -43,17 +43,17 @@ class CourseRepositoryImpl implements CourseRepository, CourseObject {
 	}
 
 	async publishStripeCheckoutCompletedEvent(
-		stripeCheckoutCompletedEventValueObject:
-			StripeCheckoutCompletedEventValueObject
+		publishStripeCheckoutCompletedEventValueObject:
+			PublishStripeCheckoutCompletedEventValueObject
 	): Promise<void> {
 		const stripeCheckoutCompletedPublisher =
 			new StripeCheckoutCompletedPublisher();
 
 		stripeCheckoutCompletedPublisher.pushMessage({
-			id: stripeCheckoutCompletedEventValueObject.id,
-			orderId: stripeCheckoutCompletedEventValueObject.orderId,
-			type: stripeCheckoutCompletedEventValueObject.type,
-			version: stripeCheckoutCompletedEventValueObject.version
+			id: publishStripeCheckoutCompletedEventValueObject.id,
+			orderId: publishStripeCheckoutCompletedEventValueObject.orderId,
+			type: publishStripeCheckoutCompletedEventValueObject.type,
+			version: publishStripeCheckoutCompletedEventValueObject.version
 		});
 
 		await stripeCheckoutCompletedPublisher.publish();

@@ -1,4 +1,4 @@
-import { StripeCheckoutCompletedEventValueObject } from "../value-object";
+import { PublishStripeCheckoutCompletedEventValueObject } from "../value-object";
 import { PublishCourseTranscodingCompletedEventValueObject } from "../value-object/publish-course-transcoding-completed-event.value-object";
 
 
@@ -10,7 +10,7 @@ export abstract class CourseRepository {
 	): Promise<void>;
 
 	abstract publishStripeCheckoutCompletedEvent(
-		stripeCheckoutCompletedEventValueObject:
-			StripeCheckoutCompletedEventValueObject
+		publishStripeCheckoutCompletedEventValueObject:
+			PublishStripeCheckoutCompletedEventValueObject
 	): Promise<void>;
 }

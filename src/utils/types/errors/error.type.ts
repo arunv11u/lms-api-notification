@@ -32,7 +32,8 @@ export enum ErrorCodes {
 	googleRedirectUriRequired = "GOOGLE_REDIRECT_URI_REQUIRED",
 	mongoDBRepositoryDoesNotExist = "MONGODB_REPOSITORY_DOES_NOT_EXIST",
 	messageEmptyInMessagingListener = "MESSAGE_EMPTY_IN_MESSAGING_LISTENER",
-	unverifiedSNSMessage = "UNVERIFIED_SNS_MESSAGE"
+	unverifiedSNSMessage = "UNVERIFIED_SNS_MESSAGE",
+	unverifiedStripeWebhookPayload = "UNVERIFIED_STRIPE_WEBHOOK_PAYLOAD"
 }
 
 export interface FormattedError {

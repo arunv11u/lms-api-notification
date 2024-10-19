@@ -1,5 +1,8 @@
 import { ErrorCodes, Factory, GenericError } from "../../utils";
-import { PublishCourseTranscodingCompletedEventUseCaseImpl } from "../application";
+import {
+	PublishCourseTranscodingCompletedEventUseCaseImpl,
+	PublishStripeCheckoutCompletedEventUseCaseImpl
+} from "../application";
 import { CourseObject } from "../domain";
 import { CourseRepositoryImpl } from "../infrastructure";
 
@@ -8,7 +11,8 @@ class CourseFactory implements Factory {
 
 	private _objects: string[] = [
 		"CourseRepository",
-		"PublishCourseTranscodingCompletedEventUseCase"
+		"PublishCourseTranscodingCompletedEventUseCase",
+		"PublishStripeCheckoutCompletedEventUseCase"
 	];
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -19,6 +23,9 @@ class CourseFactory implements Factory {
 
 		if (objectName === "PublishCourseTranscodingCompletedEventUseCase")
 			return new PublishCourseTranscodingCompletedEventUseCaseImpl();
+
+		if (objectName === "PublishStripeCheckoutCompletedEventUseCase")
+			return new PublishStripeCheckoutCompletedEventUseCaseImpl();
 
 		throw new GenericError({
 			code: ErrorCodes.invalidFactoryObject,

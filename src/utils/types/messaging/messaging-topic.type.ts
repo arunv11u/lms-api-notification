@@ -4,7 +4,8 @@ enum MessagingTopics {
 	studentWelcomeEvent = "student-welcome-event",
 	instructorWelcomeEvent = "instructor-welcome-event",
 	instructorForgotPasswordEvent = "instructor-forgot-password-event",
-	courseTranscodingCompletedEvent = "course-transcoding-completed-event"
+	courseTranscodingCompletedEvent = "course-transcoding-completed-event",
+	stripeCheckoutCompletedEvent = "stripe-checkout-completed-event"
 	
 }
 

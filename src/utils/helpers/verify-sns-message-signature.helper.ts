@@ -56,7 +56,7 @@ async function verifySNSMessageSignature(snsMessage: Record<string, string>) {
 
 		return isVerified;
 	} catch (error) {
-		winstonLogger.winston.error("Error verifying signature: ");
+		winstonLogger.winston.error("Error verifying SNS message signature");
 
 		return false;
 	}

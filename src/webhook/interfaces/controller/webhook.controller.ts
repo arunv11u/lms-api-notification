@@ -1,21 +1,26 @@
+/* eslint-disable indent */
 import express, {
 	Request,
 	Response,
 	NextFunction
 } from "express";
+import nconf from "nconf";
 import { Controller, Post, Use } from "@arunvaradharajalu/common.decorators";
-import { 
-	ErrorCodes, 
-	GenericError, 
-	getResponseHandler, 
-	verifySNSMessageSignature, 
-	winstonLogger 
+import {
+	ErrorCodes,
+	GenericError,
+	getResponseHandler,
+	verifySNSMessageSignature,
+	verifyStripeWehbookPayload,
+	winstonLogger
 } from "../../../utils";
 import { getCourseFactory } from "../../../global-config";
 import {
 	PublishCourseTranscodingCompletedEventPayloadRequestDTOImpl,
 	PublishCourseTranscodingCompletedEventRequestDTOImpl,
-	PublishCourseTranscodingCompletedEventUseCase
+	PublishCourseTranscodingCompletedEventUseCase,
+	PublishStripeCheckoutCompletedEventRequestDTOImpl,
+	PublishStripeCheckoutCompletedEventUseCase
 } from "../../../course";
 
 
@@ -102,6 +107,68 @@ export class WebhookController {
 		} catch (error) {
 			winston.error(
 				"Error in listening for transcoder webhook event:",
+				error
+			);
+
+			next(error);
+		}
+	}
+
+	@Post("/payment")
+	@Use(express.raw({ type: "application/json" }))
+	async listenForPaymentWebhook(
+		request: Request,
+		response: Response,
+		next: NextFunction
+	): Promise<void> {
+		const winston = winstonLogger.winston;
+		try {
+			winston.info("Listening for payment webhook event");
+			const signature = request.headers["stripe-signature"] as string;
+			const wehbookEndpointSecret = nconf.get("STRIPE_WEBHOOK_SECRET");
+
+			const responseHandler = getResponseHandler();
+
+			const event = await verifyStripeWehbookPayload(
+				request.body,
+				signature,
+				wehbookEndpointSecret
+			);
+
+			switch (event.type) {
+				case "checkout.session.completed": {
+					const checkoutSessionCompletedEvent =
+						// eslint-disable-next-line max-len
+						// eslint-disable-next-line @typescript-eslint/no-explicit-any
+						event.data.object as Record<string, any>;
+
+					const publishstripeCheckoutCompletedEventRequestDTO =
+						new PublishStripeCheckoutCompletedEventRequestDTOImpl();
+					publishstripeCheckoutCompletedEventRequestDTO
+						.eventId = event.id;
+					publishstripeCheckoutCompletedEventRequestDTO.orderId =
+						checkoutSessionCompletedEvent.metadata.orderId;
+
+					const publishStripeCheckoutCompletedUseCase =
+						getCourseFactory()
+							.make("PublishStripeCheckoutCompletedEventUseCase") as PublishStripeCheckoutCompletedEventUseCase;
+
+					publishStripeCheckoutCompletedUseCase
+						.publishstripeCheckoutCompletedEventRequestDTO =
+						publishstripeCheckoutCompletedEventRequestDTO;
+
+					await publishStripeCheckoutCompletedUseCase.execute();
+
+					break;
+				}
+				default:
+					winstonLogger.winston.error(`Unhandled event type : ${event.type}`);
+			}
+
+			responseHandler.ok(response);
+		} catch (error) {
+			winston.error(
+				"Error in listening for payment webhook event:",
 				error
 			);
 

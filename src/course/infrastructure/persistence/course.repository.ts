@@ -1,11 +1,13 @@
 import {
 	CourseObject,
 	CourseRepository,
-	PublishCourseTranscodingCompletedEventValueObject
+	PublishCourseTranscodingCompletedEventValueObject,
+	PublishStripeCheckoutCompletedEventValueObject
 } from "../../domain";
 import {
 	CourseTranscodingCompletedEvent,
-	CourseTranscodingCompletedPublisher
+	CourseTranscodingCompletedPublisher,
+	StripeCheckoutCompletedPublisher
 } from "../messaging";
 
 
@@ -38,6 +40,23 @@ class CourseRepositoryImpl implements CourseRepository, CourseObject {
 		courseTranscodingCompletedPublisher.pushMessage(message);
 
 		await courseTranscodingCompletedPublisher.publish();
+	}
+
+	async publishStripeCheckoutCompletedEvent(
+		publishStripeCheckoutCompletedEventValueObject:
+			PublishStripeCheckoutCompletedEventValueObject
+	): Promise<void> {
+		const stripeCheckoutCompletedPublisher =
+			new StripeCheckoutCompletedPublisher();
+
+		stripeCheckoutCompletedPublisher.pushMessage({
+			id: publishStripeCheckoutCompletedEventValueObject.id,
+			orderId: publishStripeCheckoutCompletedEventValueObject.orderId,
+			type: publishStripeCheckoutCompletedEventValueObject.type,
+			version: publishStripeCheckoutCompletedEventValueObject.version
+		});
+
+		await stripeCheckoutCompletedPublisher.publish();
 	}
 }
 

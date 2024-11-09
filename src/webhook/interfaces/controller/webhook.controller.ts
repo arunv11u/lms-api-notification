@@ -129,7 +129,7 @@ export class WebhookController {
 
 			const responseHandler = getResponseHandler();
 
-			const event = await verifyStripeWehbookPayload(
+			const event = verifyStripeWehbookPayload(
 				request.body,
 				signature,
 				wehbookEndpointSecret

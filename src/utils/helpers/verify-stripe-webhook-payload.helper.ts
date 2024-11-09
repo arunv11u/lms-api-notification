@@ -5,20 +5,24 @@ import { ErrorCodes } from "../types";
 import { winstonLogger } from "../winston";
 
 
-async function verifyStripeWehbookPayload(
+function verifyStripeWehbookPayload(
 	payload: string,
 	signature: string,
 	wehbookEndpointSecret: string
-): Promise<Stripe.Event> {
+): Stripe.Event {
 	try {
 		const stripe = new Stripe(nconf.get("STRIPE_API_KEY"));
 
 		const event = stripe.webhooks
-			.constructEvent(payload, signature, wehbookEndpointSecret);
+			.constructEvent(
+				payload,
+				signature,
+				wehbookEndpointSecret
+			);
 
 		return event;
 	} catch (error) {
-		winstonLogger.winston.error("Error verifying stripe webhook payload");
+		winstonLogger.winston.error("Error verifying stripe webhook payload", error);
 
 		throw new GenericError({
 			code: ErrorCodes.unverifiedStripeWebhookPayload,

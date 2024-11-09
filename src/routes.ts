@@ -35,7 +35,6 @@ class RoutesImpl implements Routes {
 		app.enable("trust proxy");
 		app.use(setSecurityHeaders);
 		app.use(cors(corsOptions));
-		app.use(express.json());
 		app.use(express.urlencoded({ extended: true }));
 
 		if (process.env.NODE_ENV === Environment.DEV)

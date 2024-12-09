@@ -40,6 +40,7 @@ export class WebhookController {
 			winston.info("Listening for transcoder webhook event");
 
 			const requestBody = JSON.parse(request.body);
+			console.log("requestBody ::", requestBody);
 
 			const isVerifiedMessage = await verifySNSMessageSignature(
 				requestBody
@@ -61,7 +62,7 @@ export class WebhookController {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			const playlists = message.playlists as any[];
 			const userMetadata = message.userMetadata as Record<string, string>;
-			const lectureIds = userMetadata.lectureIds.split(",");
+			const lectureIds = userMetadata.lectureIds.split("_");
 
 			const publishCourseTranscodingCompletedEventUsecase =
 				getCourseFactory().make("PublishCourseTranscodingCompletedEventUseCase") as PublishCourseTranscodingCompletedEventUseCase;

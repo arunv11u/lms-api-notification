@@ -40,7 +40,6 @@ export class WebhookController {
 			winston.info("Listening for transcoder webhook event");
 
 			const requestBody = JSON.parse(request.body);
-			console.log("requestBody ::", requestBody);
 
 			const isVerifiedMessage = await verifySNSMessageSignature(
 				requestBody
